@@ -57,11 +57,11 @@ namespace task_1
         //FizzBuzz - option 1
         private void FizzBuzz()
         {
-            bool correctNumber = false; //boolean used to check input format
             Console.Clear();
             Console.WriteLine("Write an integer between 0 and 1000: ");
 
-            if (Int32.TryParse(Console.ReadLine(), out int number)) //using TryParse, so the program won't fail if given wrong type
+            bool correctNumber = false; //boolean used to check input format
+            if (int.TryParse(Console.ReadLine(), out int number)) //using TryParse, so the program won't fail if given wrong type
             {
                 if (number >= 0 && number <= 1000) //numbers range
                 {
