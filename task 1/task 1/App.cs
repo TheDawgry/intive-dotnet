@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,12 @@ namespace task_1
         public ConsoleApp() { }
 
         ConsoleKeyInfo choice;
+        Guid directoryName;
+        private const string basePath = @"c:\";
+        private string path;
+        private Guid[] directories = new Guid[5];
+        private bool dirCreated = false;
+        private int howMany;
 
         //Basic function that runs the class
         public void Play() 
@@ -54,6 +61,21 @@ namespace task_1
             }
         }
 
+        private bool TFChecker(string text)
+        {
+            Console.WriteLine(text +" (1. YES   2. NO): ");
+            choice = Console.ReadKey();
+            switch (choice.KeyChar)
+            {
+                case '1':
+                    return true;
+                case '2':
+                    return false;
+                default:
+                    return false;
+            }
+        }
+
         //FizzBuzz - option 1
         private void FizzBuzz()
         {
@@ -89,14 +111,101 @@ namespace task_1
             }
         }
 
+        //DeepDive - option 2
         private void DeepDive()
         {
+            Console.Clear();
+            Console.Write("How many directories do you want to create? (max 5): ");
 
+            if (int.TryParse(Console.ReadLine(), out howMany)) //using TryParse, like in FizzBuzz method
+            {
+                if (howMany > 0 && howMany <= 5) //limited to 5 directories
+                {
+                    //set used path to base
+                    path = basePath;
+
+                    for (int i=0; i<howMany; i++) //create exact amount of directories
+                    {
+                        directoryName = Guid.NewGuid();
+                        directories[i] = directoryName; //used for DrownItDown function
+                        path += directoryName + @"\";
+                        DirectoryInfo di = Directory.CreateDirectory(path); //create directory
+                    }
+                    dirCreated = true;
+                }
+                else
+                {
+                    Console.WriteLine("Number out of range, you can only create 1-5 directories!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("This value should be an integer!");
+            }
+
+            //wait for user reaction before returning to menu
+            Console.WriteLine("Directories created!");
+            Console.ReadKey(); 
         }
 
+        //DrownItDown - option 3
         private void DrownItDown()
         {
+            Console.Clear();
 
+            //check if DeepDive was used before, if not, suggest user to do it
+            if (!dirCreated)
+            {
+                if(TFChecker("No directories created, do you want to create some now ?"))
+                {
+                    DeepDive();
+                }
+                return;
+            }
+
+            //actual function starts here
+            Console.WriteLine("How deep do you want to create a file?: ");
+            if (int.TryParse(Console.ReadLine(), out int howDeep)) //using TryParse, like in FizzBuzz and DeepDive methods
+            {
+                if (howDeep > 0 && howDeep <= howMany) //limited to the amount of 
+                {
+                    //set used path to base
+                    path = basePath;
+
+                    for(int i = 0; i < howDeep; i++) //go as deep as demanded
+                    {
+                        path += directories[i] + @"\";
+                    }
+
+                    //declare a file name
+                    string fileName = path + "file";
+
+                    if (File.Exists(fileName)) //check if file exists
+                    {
+                        if (!TFChecker("The file already exists, do you want to overwrite it?"))
+                        {
+                            return;
+                        }
+                    }
+
+                    //create a file
+                    FileStream fs = File.Create(fileName);
+                    fs.Close();
+                    
+                }
+                else
+                {
+                    Console.WriteLine("Number out of range, "+ howMany +" is maximum!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("This value should be an integer!");
+            }
+            
+            //wait for user reaction before returning to menu
+            Console.WriteLine("File created!");
+            Console.ReadKey(); 
         }
     }
 
