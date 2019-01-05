@@ -19,7 +19,9 @@ namespace task_1
         private bool dirCreated = false;
         private int howMany;
 
-        //Basic function that runs the class
+        /// <summary>
+        /// Basic function that runs the class
+        /// </summary>
         public void Play() 
         {
             WriteMenu();
