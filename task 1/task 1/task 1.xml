@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>task 1</name>
+    </assembly>
+    <members>
+        <member name="M:task_1.ConsoleApp.Play">
+            <summary>
+            Basic function that runs the class
+            </summary>
+        </member>
+    </members>
+</doc>
